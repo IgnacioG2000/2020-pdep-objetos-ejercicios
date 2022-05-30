@@ -1,0 +1,79 @@
+import configTeclas.*
+import enemigos.*
+import energia.*
+import wollok.game.*
+import jugador.*
+import menuPrincipal.*
+import muros.*
+import niveles.*
+import pasaporte.*
+import avion.*
+
+describe "Tests de la vida y energia del jugador"{
+	test "El jugador pierde una vida"{ 
+		jugador.setearNivel(nivel1)
+		jugador.perderVida()
+		assert.equals(2,jugador.vidas())
+		
+	}
+	test "Un jugador al moverse pierde energia"{ 
+		jugador.setearNivel(nivel1)                 
+		jugador.mover(game.at(2,3),arriba)    
+		assert.equals(99,jugador.energiaJugador())
+	}
+	
+	test "El jugador al clavarse un chori gana power"{ 
+		const choripan = new Chori(position = game.at(5,5)) 
+		jugador.setearNivel(nivel1)  
+		jugador.ganarEnergia(choripan.energiaQueDa())
+		assert.equals(100,jugador.energiaJugador())
+	}
+}
+
+describe "Tests de los aviones"{
+	test "El jugador no pasa de nivel sin el pasaporte"{
+		const pasaporte = new Pasaporte(position = game.at(16,2),fueEncontrado = false)
+		const avion = new Avion(siguienteNivel = nivel2, position = game.at(25,1),pasaporteActual = pasaporte)
+		jugador.setearNivel(nivel1)   
+		avion.chocarJugador()
+		assert.notThat(jugador.nivelActual() == 2)
+	}
+}
+
+describe "Tests de los muros"{
+	test "El Jugador no puede atravezar una pared" {
+	muroslvl1.generarParedes()
+	jugador.mover(game.at(3,2),derecha)
+	assert.equals(game.at(2,2),jugador.position())
+
+	}
+}
+
+describe "Tests de movimiento de Enemigos"{
+	test "Un enemigo vertical vuelve a su posicion de inicio"{
+		const enemigo = new EnemigoVertical (limite = 2,position = game.at(2,1))
+		enemigo.moverse()
+		enemigo.moverse()
+		enemigo.moverse()
+		enemigo.moverse()
+		assert.equals(game.at(2,1),enemigo.position())
+	}
+
+	test "Un enemigo horizontal vuelve a su posicion de inicio"{
+		const enemigo = new EnemigoHorizontal (limite = 2,position = game.at(2,1))
+		enemigo.moverse()
+		enemigo.moverse()
+		enemigo.moverse()
+		enemigo.moverse()
+		assert.equals(game.at(2,1),enemigo.position())
+	}
+}
+
+describe "Tests del pasaporte"{
+	test "Un pasaporte fue encontrado"{
+		const pasaporte = new Pasaporte (position = game.at(1,1), fueEncontrado = false)
+		pasaporte.fueEncontrado(true)
+		assert.that(pasaporte.fueEncontrado())
+	}
+}
+	

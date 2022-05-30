@@ -1,0 +1,5 @@
+import utilities.configuracion.*
+
+program game{
+	configuracion.iniciar()
+}

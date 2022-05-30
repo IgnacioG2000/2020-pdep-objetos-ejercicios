@@ -1,0 +1,40 @@
+import wollok.game.*
+import yellowSubmarine.*
+import submarino.*
+import items.*
+import obstaculos.*
+
+describe "escudo"{
+	
+	fixture {
+		game.clear()
+		game.addVisual(submarino)
+	}
+	
+	test "El submarino agarra el item escudo y está protegido"{
+		submarino.moverseA(game.at(7,7))
+		escudo.rodearSubmarino()
+		assert.equals(submarino.position(), escudo.position())
+		assert.that(submarino.tieneEscudo())
+	}
+	
+	test "El submarino sufre daño y pierde el escudo"{
+		submarino.moverseA(game.at(7,7))
+		escudo.rodearSubmarino()
+		
+		assert.that(submarino.tieneEscudo())
+		
+		submarino.perderEscudo()
+		
+		assert.notThat(submarino.tieneEscudo())
+	}
+	
+	test "El submarino agarra el item escudo y el buff del escudo lo sigue"{
+		submarino.moverseA(game.at(7,7))
+		escudo.rodearSubmarino()
+		
+		submarino.moverseA(game.at(10,10))
+		assert.equals(submarino.position(), escudo.position())
+	}
+}
+	

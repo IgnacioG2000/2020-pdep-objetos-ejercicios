@@ -1,0 +1,62 @@
+import personajes.*
+import objetos.*
+import wollok.game.*
+import movimientos.*
+import screens.*
+import buffs.*
+import carpinchos.*
+
+describe"Modo carpincho"{
+	fixture{
+		game.addVisual(carpincho)
+		game.addVisual(yaguarete)
+	}
+		test "el carpincho se no se puede mover si está congelado"{
+		carpincho.estaCongelado(true)
+		assert.notThat(carpincho.puedeMoverAl(derecha))
+	
+}
+	
+	test "si el carpincho se mueve a la izquierda su imagen se cambia"{
+		carpincho.moverseA(derecha)
+		carpincho.moverseA(izquierda)
+		assert.equals(carpincho.image(), "carpincho left.png")
+	}
+}
+
+describe"Modo cazar"{
+	test "Al colisionar con el carpincho termina el juego"{
+		//carpincho.moverseA(game.center(),derecha) 
+		//yaguarete.moverseA(game.center(),derecha)
+		assert.that(carpincho.perdiste())
+	}
+}
+
+describe "modo 2 jugadores"{
+	test "si los 2 jugadores colisionan se termina el juego"{
+		carpincho.moverseA(derecha) 
+		yaguarete.moverseA(derecha)
+		yaguarete.moverseA(izquierda)
+		assert.that(carpincho.perdiste())
+	}
+	
+	test "el yaguarete no se puede mover si está congelado"{
+		
+		
+		yaguarete.estaCongelado(true)
+		assert.notThat(yaguarete.puedeMoverAl(derecha))
+	
+}
+	test "el yaguarete no se puede mover si está al lado de una pared"{
+		game.addVisual(new Muro(position = game.at(20,19)))
+		carpincho.moverseA(derecha)
+		assert.notThat(carpincho.puedeMoverAl(derecha))
+	
+}
+	
+
+}
+
+
+
+

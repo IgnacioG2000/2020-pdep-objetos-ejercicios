@@ -1,0 +1,96 @@
+import wollok.game.*
+import jugadores.*
+import utilities.direcciones.*
+import agente.*
+import villano.*
+import objetos.*
+
+
+describe "Interacción con los objetos"
+{
+	
+	const objeto1 = new LiquidoRojo(position = game.at(7,7))
+	const coleccionable = new ObjetoColeccionable(posicionDestino = game.at(20,6))
+	
+	fixture
+	{
+		game.addVisual(agente)
+		villano.positionInicial()	// (6,7)
+		game.addVisual(objeto1)
+	}
+	/* 
+	test "Cuando un jugador se encuentra con un objeto, se añade a su inventario"
+	{
+		villano.moverseA(right)
+		assert.equals(game.at(4,15), villano.guardarObjeto(objeto1).position())
+	}
+	*/
+	test "Cuando el agente se encuentra con un objeto coleccionable, se añade a su inventario"
+	{
+		agente.guardarColeccionable(coleccionable)
+		assert.that(agente.objetosColeccionados().contains(coleccionable))
+	}
+	
+}
+
+ 
+describe "Personajes usan sus poderes"
+{
+	const otroObjetoRojo = new LiquidoRojo()
+	const otroObjetoVerde = new LiquidoVerde()
+	const otroObjetoAzul = new LiquidoAzul()
+	const objetoColeccionable = new ObjetoColeccionable(posicionDestino= game.at(1,1))
+	
+	fixture
+	{
+		villano.positionInicial()
+		game.addVisual(agente)
+		game.addVisual(otroObjetoRojo)
+		game.addVisual(otroObjetoVerde)
+		game.addVisual(objetoColeccionable)
+	}
+	/*
+	test "Cuando el villano usa el objeto rojo pone unos pinches"
+	{
+		villano.moverseA(down) 		// (6,6) y mira para abajo
+		villano.guardarObjeto(otroObjetoRojo)
+		assert.equals(game.at(6,5), villano.usarObjetoRojo().position())
+	}
+	
+	test"Cuando el villano usa el objeto verde, le saca un coleccionable al agente"
+	{
+		villano.guardarObjeto(otroObjetoVerde)
+		agente.guardarColeccionable(objetoColeccionable)
+		villano.usarObjetoVerde()
+		assert.notThat(agente.objetosColeccionados().contains(objetoColeccionable))
+		assert.that(agente.objetosColeccionados().isEmpty())
+	}
+	
+	test"Cuando el villano usa el objeto azul, deja inmovilizado al agente"
+	{
+		villano.guardarObjeto(otroObjetoAzul)
+		villano.usarObjeto()
+		assert.notThat(agente.movimientosHabilitados())
+	}
+	
+	test "El agente usa el objeto rojo y gana una vida, luego de perderla chocando contra el villano"
+	{
+		agente.guardarObjeto(otroObjetoRojo)
+		villano.interactuar()
+		agente.usarObjetoRojo()
+		assert.equals(3, agente.cantidadDeVidas())
+	}
+	*/
+	test "Cuando el agente usa el objeto verde, se teletransporta a su posicion inicial"
+	{
+		agente.usarObjetoVerde()
+		assert.equals(game.at(20,6),agente.position())
+	}
+} 
+
+
+
+
+
+
+

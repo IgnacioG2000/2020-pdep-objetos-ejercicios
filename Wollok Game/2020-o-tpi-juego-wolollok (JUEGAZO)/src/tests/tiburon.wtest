@@ -1,0 +1,56 @@
+import wollok.game.*
+import yellowSubmarine.*
+import submarino.*
+import items.*
+import obstaculos.*
+import movimientos.*
+
+const tiburon1 = new Tiburon(movimiento =  new MovimientoRecto(sentido = derecha), distancia = 3, velocidad = 100, posicion = game.at(0,0)) 
+const piedra = new Piedra(imagen = "Stone_6.png", posicion = game.at(2,0)) 
+
+
+describe "tiburon" {
+
+	fixture {
+		game.clear()
+		game.addVisual(tiburon1)
+		game.addVisual(submarino)
+	}
+	
+	test "cuando el submarino choca con un tiburon y NO tiene escudo pierde 1 vida" {
+		
+		tiburon1.teChocoElSubmarino()
+		assert.equals(submarino.vidas(),2)
+	}
+	
+	test "cuando el submarino choca con un tiburon y tiene escudo, NO pierde vidas" {
+		
+		escudo.rodearSubmarino()
+		tiburon1.teChocoElSubmarino()
+		assert.equals(submarino.vidas(),3)
+		assert.notThat(submarino.tieneEscudo())
+	}
+	
+	test "cuando el submarino choca con un tiburon, NO tiene escudo y tiene 1 vida, pierde el juego" {
+
+		submarino.vidas(1)
+		tiburon1.teChocoElSubmarino()
+		assert.equals(submarino.vidas(),0)
+	}
+	
+	test "el tiburon se mueve correctamente una posicion" {
+
+		tiburon1.moverse()
+		assert.equals(tiburon1.position(),game.at(1,0))
+	}
+	
+	test "el tiburon cambia de sentido al recorrer la distancia indicada" {
+
+		4.times({i => tiburon1.moverse()})
+		assert.equals(tiburon1.position(),game.at(3,0))
+		assert.equals(tiburon1.movimiento().sentido(),izquierda)
+		
+		2.times({i => tiburon1.moverse()})
+		assert.equals(tiburon1.position(),game.at(1,0))
+	}	
+}

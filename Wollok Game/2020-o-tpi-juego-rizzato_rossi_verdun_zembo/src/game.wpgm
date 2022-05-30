@@ -1,0 +1,7 @@
+import wollok.game.*
+import menuPrincipal.*
+
+program game {
+	menu.pantallaDeInicio()
+	game.start()
+}
